@@ -19,7 +19,7 @@ int main()
 
 	float dx, dy, rotation;
 	sf::Vector2f playerPos;
-	sf::Vector2i cursorPos;
+	sf::Vector2i cursorPos; //
 	sf::Time elapsed;
 	while (window.isOpen())
 	{

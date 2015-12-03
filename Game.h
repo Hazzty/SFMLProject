@@ -14,4 +14,4 @@ public:
 	void Update(float dt, sf::RenderWindow* window);
 
 };
-#endif//
+#endif/
