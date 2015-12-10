@@ -5,17 +5,17 @@ Player::Player()
 	health = 1;
 	velocity = 200.f;
 	sf::Texture text;
-	text.loadFromFile("Resources/player.png");
+	text.loadFromFile("Resources/player2.gif");
 	texture = text;
+	texture.setSmooth(true);
 	setTexture(texture);
-	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
+	setScale(0.5, 0.5);
+	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
 }
 Player::Player(int health, float velocity)
 {
 	this->health = health;
 	this->velocity = velocity;
-	
-	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
 }
 int Player::getHealth() const
 {

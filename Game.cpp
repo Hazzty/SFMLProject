@@ -5,7 +5,7 @@ Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
 	player = new Player();
-	view = sf::View(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y));
+	view = sf::View(sf::FloatRect(0, 0, 1000, 600));
 }
 
 Game::~Game()
@@ -31,8 +31,10 @@ void Game::Update(float dt, sf::RenderWindow* window)
 	sf::Vector2i cursorPos;
 	playerPos.x = player->getGlobalBounds().left;
 	playerPos.y = player->getGlobalBounds().top;
+
 	cursorPos = sf::Mouse::getPosition(*window);
 	cursorPos = sf::Vector2i(window->mapPixelToCoords(cursorPos, view));
+
 	dx = playerPos.x - cursorPos.x;
 	dy = playerPos.y - cursorPos.y;
 
@@ -43,11 +45,8 @@ void Game::Update(float dt, sf::RenderWindow* window)
 	window->setTitle(std::to_string(1 / dt));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-	{
 		bullets.push_back(new Bullet(player, rotation + 180));
-	}
 
-	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		player->move((200.f * dt), 0);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -61,8 +60,6 @@ void Game::Update(float dt, sf::RenderWindow* window)
 
 	/*
 	...getRot()*PI/180 converts to radians
-
-
 	*/
 	for (int i = 0; i < bullets.size(); i++)
 		bullets.at(i)->move((cos((bullets.at(i)->getRot())*PI / 180) * bullets.at(i)->getVelocity() * dt), (sin((bullets.at(i)->getRot())*PI / 180) * bullets.at(i)->getVelocity() * dt));

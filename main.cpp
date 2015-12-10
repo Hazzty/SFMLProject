@@ -7,7 +7,7 @@
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "You Are Blue");
 	
 	Game* game = new Game(&window);
 	sf::Clock dt;
