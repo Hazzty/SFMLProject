@@ -1,24 +1,20 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(sf::RectangleShape& player, float rot)
+Bullet::Bullet(sf::Sprite* player, float rot)
 {
-	shape = sf::CircleShape(3.f);
-	shape.setFillColor(sf::Color::White);
-	shape.setPosition(player.getPosition().x, player.getPosition().y);
-	velocity = 400.f;
+	setRadius(3.f);
+	setFillColor(sf::Color::White);
+	setPosition(player->getPosition().x, player->getPosition().y);
+	velocity = 300.f;
 
 	this->rot = rot;
 }
-float Bullet::getRot()
+float Bullet::getRot() const
 {
 	return rot;
 }
-float Bullet::getVelocity()
+float Bullet::getVelocity() const
 {
 	return velocity;
-}
-sf::CircleShape* Bullet::getShape()
-{
-	return &shape;
 }

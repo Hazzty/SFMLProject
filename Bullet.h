@@ -2,7 +2,7 @@
 #define BULLET_H
 #include <SFML/Graphics.hpp>
 
-class Bullet : sf::CircleShape
+class Bullet : public sf::CircleShape
 {
 private:
 	float velocity;
@@ -10,8 +10,8 @@ private:
 
 public:
 	Bullet(sf::Sprite* player, float rot);
-	float getRot();
-	float getVelocity();
+	float getRot() const;
+	float getVelocity() const;
 
 };
 #endif
