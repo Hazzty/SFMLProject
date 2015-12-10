@@ -2,15 +2,14 @@
 #define BULLET_H
 #include <SFML/Graphics.hpp>
 
-class Bullet
+class Bullet : sf::CircleShape
 {
 private:
 	float velocity;
 	float rot;
-	sf::CircleShape shape;
+
 public:
-	Bullet(sf::RectangleShape& player, float rot);
-	sf::CircleShape* getShape();
+	Bullet(sf::Sprite* player, float rot);
 	float getRot();
 	float getVelocity();
 

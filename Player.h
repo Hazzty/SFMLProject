@@ -1,6 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-class Player
+#include <SFML\Graphics.hpp>
+
+class Player : sf::Sprite
 {
 private:
 	int health;

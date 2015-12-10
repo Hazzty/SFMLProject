@@ -10,7 +10,6 @@ Bullet::Bullet(sf::RectangleShape& player, float rot)
 
 	this->rot = rot;
 }
- //
 float Bullet::getRot()
 {
 	return rot;

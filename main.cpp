@@ -11,6 +11,7 @@ int main()
 	sf::View view(sf::FloatRect(0, 0, 1000, 600));
 	window.setView(view);
 	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	sf::RectangleShape player;
 	player.setSize(sf::Vector2f(20, 20));
 	player.setFillColor(sf::Color::Blue);
@@ -38,7 +39,7 @@ int main()
 
 		player.setRotation(rotation + 180);
 		sf::Time dt= clock.restart();
-		window.setTitle(std::to_string(dt.asSeconds()));
+		window.setTitle(std::to_string(1/dt.asSeconds()));
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
@@ -68,7 +69,7 @@ int main()
 				window.close();
 		}
 		/*
-			...getRot()*PI
+			...getRot()*PI/180 converts to radians
 			
 			
 		*/
@@ -86,6 +87,6 @@ int main()
 		window.draw(player);
 		window.display();
 	}
-
+	bullets.clear();
 	return 0;
 }
