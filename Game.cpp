@@ -5,7 +5,7 @@ Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
 	player = new Player();
-
+	view = sf::View(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y));
 }
 
 Game::~Game()
@@ -25,18 +25,17 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Game::Update(float dt, sf::RenderWindow* window)
 {
+
 	float dx, dy, rotation;
 	sf::Vector2f playerPos;
 	sf::Vector2i cursorPos;
-
-	sf::View view(sf::FloatRect(0, 0, 1280, 720));
 	playerPos.x = player->getGlobalBounds().left;
 	playerPos.y = player->getGlobalBounds().top;
 	cursorPos = sf::Mouse::getPosition(*window);
 	cursorPos = sf::Vector2i(window->mapPixelToCoords(cursorPos, view));
-
 	dx = playerPos.x - cursorPos.x;
 	dy = playerPos.y - cursorPos.y;
+
 	rotation = (atan2(dy, dx)) * 180 / PI; //Get the angle as degrees between the two vectors, cursorPos and player pos
 
 	player->setRotation(rotation + 180);

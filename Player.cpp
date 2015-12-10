@@ -1,19 +1,21 @@
 #include "Player.h"
-
+#include <Windows.h>
 Player::Player()
 {
 	health = 1;
 	velocity = 200.f;
-	sf::Texture texture;
-	texture.loadFromFile("Resources/player.png");
+	sf::Texture text;
+	text.loadFromFile("Resources/player.png");
+	texture = text;
 	setTexture(texture);
-	setTextureRect(sf::IntRect(0, 0, 150, 150));
 	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
 }
 Player::Player(int health, float velocity)
 {
 	this->health = health;
 	this->velocity = velocity;
+	
+	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
 }
 int Player::getHealth() const
 {

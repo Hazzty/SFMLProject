@@ -13,6 +13,7 @@ private:
 	sf::Window* window;
 	std::vector<Bullet*> bullets;
 	Player* player;
+	sf::View view;
 
 public:
 	Game(sf::RenderWindow* window);
