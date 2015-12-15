@@ -8,6 +8,7 @@ private:
 	int health;
 	float velocity;
 	sf::Texture texture;
+
 public:
 	Player();
 	Player(int health, float velocity);

@@ -1,11 +1,14 @@
 #include "Game.h"
 #define PI 3.14159265
-
+double bulletTime = 0;
+double frameRateTimer = 0;
 Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
 	player = new Player();
-	view = sf::View(sf::FloatRect(0, 0, 1000, 600));
+	view = sf::View(sf::FloatRect(0, 0, 1280, 720));
+	for (int i = 0; i < 10; i++)
+		enemies.push_back(new EnemySmall(200, 3, player));
 }
 
 Game::~Game()
@@ -17,56 +20,80 @@ Game::~Game()
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(*player, states);
-
+	
 	for (unsigned int i = 0; i < bullets.size(); i++)
 		target.draw(*bullets.at(i), states);
+	for (unsigned int i = 0; i < enemies.size(); i++)
+		target.draw(*enemies.at(i), states);
 
 }
 
 void Game::Update(float dt, sf::RenderWindow* window)
 {
+	if (frameRateTimer >= 0.1)
+	{
+		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()));
+		frameRateTimer = 0;
+	}
+	else
+		frameRateTimer += dt;
+	//=========== Player Face Cursor ==========
+	sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
-	float dx, dy, rotation;
-	sf::Vector2f playerPos;
-	sf::Vector2i cursorPos;
-	playerPos.x = player->getGlobalBounds().left;
-	playerPos.y = player->getGlobalBounds().top;
+	float dx = player->getPosition().x - mousePos.x;
+	float dy = player->getPosition().y - mousePos.y;
 
-	cursorPos = sf::Mouse::getPosition(*window);
-	cursorPos = sf::Vector2i(window->mapPixelToCoords(cursorPos, view));
+	float playerRotation = ((atan2(dy, dx)) * 180 / PI) + 180;
 
-	dx = playerPos.x - cursorPos.x;
-	dy = playerPos.y - cursorPos.y;
+	player->setRotation(playerRotation);
 
-	rotation = (atan2(dy, dx)) * 180 / PI; //Get the angle as degrees between the two vectors, cursorPos and player pos
-
-	player->setRotation(rotation + 180);
-
-	window->setTitle(std::to_string(1 / dt));
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		bullets.push_back(new Bullet(player, rotation + 180));
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (bulletTime >= 0.1)
+		{
+			bullets.push_back(new Bullet(player));
+			bulletTime = 0;
+		}
+		else
+			bulletTime += dt;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		player->move((200.f * dt), 0);
+		if (player->getPosition().x + player->getVelocity()*dt <= 1280)
+			player->move((player->getVelocity() * dt), 0);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		player->move(-200.f * dt, 0);
+		if (player->getPosition().x - player->getVelocity()*dt >= 0)
+		player->move(-player->getVelocity() * dt, 0);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		player->move(0, -200.f * dt);
+		if (player->getPosition().y - player->getVelocity()*dt >= 0)
+		player->move(0, -player->getVelocity() * dt);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		player->move(0, 200.f * dt);
+		if (player->getPosition().y + player->getVelocity()*dt <= 720)
+		player->move(0, player->getVelocity() * dt);
 
-
-
-	/*
-	...getRot()*PI/180 converts to radians
-	*/
 	for (int i = 0; i < bullets.size(); i++)
-		bullets.at(i)->move((cos((bullets.at(i)->getRot())*PI / 180) * bullets.at(i)->getVelocity() * dt), (sin((bullets.at(i)->getRot())*PI / 180) * bullets.at(i)->getVelocity() * dt));
+		bullets.at(i)->setPosition(
+				bullets.at(i)->getPosition().x + (cos(bullets.at(i)->getRotation()*PI/180) * (bullets.at(i)->getVelocity() * dt))
+				, bullets.at(i)->getPosition().y + (sin(bullets.at(i)->getRotation()*PI / 180) * (bullets.at(i)->getVelocity() * dt)));
 
-	if (bullets.size() > 1000)
-		bullets.erase(bullets.begin());
+	if (!bullets.empty())
+	{
+		if (bullets.front()->getPosition().x > 1280 || bullets.front()->getPosition().x < 0 || bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > 720 || bullets.size() >= 100)
+		{
+			delete *bullets.begin();
+			bullets.erase(bullets.begin());
+		}
+	}
+		
 
+	for (int i = 0; i < enemies.size(); i++)
+		enemies.at(i)->moveEnemy(dt);
+	
+	for (Enemy* enemy : enemies)
+		for (Bullet* bullet: bullets)
+			if (enemy->getGlobalBounds().intersects(bullet->getGlobalBounds()))
+			{
+				enemy->setHealth(enemy->getHealth() - 1);
+			}
 
-
+	
 }
