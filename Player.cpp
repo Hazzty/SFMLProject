@@ -3,7 +3,7 @@
 Player::Player()
 {
 	health = 1;
-	velocity = 200.f;
+	velocity = 300.f;
 	sf::Texture text;
 	text.loadFromFile("Resources/player2.gif");
 	texture = text;

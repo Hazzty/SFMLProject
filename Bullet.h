@@ -7,9 +7,11 @@ class Bullet : public sf::CircleShape
 private:
 	float velocity;
 	float rot;
+	
 
 public:
-	Bullet(sf::Sprite* player, float rot);
+	Bullet(sf::Sprite* player);
+
 	float getRot() const;
 	float getVelocity() const;
 

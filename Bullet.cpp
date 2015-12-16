@@ -1,14 +1,14 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(sf::Sprite* player, float rot)
+Bullet::Bullet(sf::Sprite* player)
 {
 	setRadius(3.f);
 	setFillColor(sf::Color::White);
 	setPosition(player->getPosition().x, player->getPosition().y);
-	velocity = 300.f;
-
-	this->rot = rot;
+	velocity = 600.f;
+	rot = player->getRotation();
+	setRotation(rot);
 }
 float Bullet::getRot() const
 {
