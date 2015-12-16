@@ -5,6 +5,7 @@ EnemySmall::EnemySmall(float speed, float health, Player* player) : Enemy(speed,
 	setSize(sf::Vector2f(50.f, 50.f));
 	setFillColor(sf::Color::Red);
 	setPosition(rand()%1280, rand()%720);
+	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
 }
 
 

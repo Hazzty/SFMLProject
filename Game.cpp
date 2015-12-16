@@ -70,10 +70,10 @@ void Game::Update(float dt, sf::RenderWindow* window)
 		if (player->getPosition().y + player->getVelocity()*dt <= 720)
 		player->move(0, player->getVelocity() * dt);
 
-	for (int i = 0; i < bullets.size(); i++)
-		bullets.at(i)->setPosition(
-				bullets.at(i)->getPosition().x + (cos(bullets.at(i)->getRotation()*PI/180) * (bullets.at(i)->getVelocity() * dt))
-				, bullets.at(i)->getPosition().y + (sin(bullets.at(i)->getRotation()*PI / 180) * (bullets.at(i)->getVelocity() * dt)));
+	for (Bullet* bullet: bullets)
+		bullet->setPosition(
+				bullet->getPosition().x + (cos(bullet->getRotation()*PI/180) * (bullet->getVelocity() * dt))
+				, bullet->getPosition().y + (sin(bullet->getRotation()*PI / 180) * (bullet->getVelocity() * dt)));
 
 	if (!bullets.empty())
 	{
@@ -87,13 +87,23 @@ void Game::Update(float dt, sf::RenderWindow* window)
 
 	for (int i = 0; i < enemies.size(); i++)
 		enemies.at(i)->moveEnemy(dt);
-	
-	for (Enemy* enemy : enemies)
-		for (Bullet* bullet: bullets)
-			if (enemy->getGlobalBounds().intersects(bullet->getGlobalBounds()))
+
+	for (int eI = 0; eI < enemies.size(); eI++)
+	{
+		for (int bI = 0; bI < bullets.size(); bI++)
+		{
+			if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()))
 			{
-				enemy->setHealth(enemy->getHealth() - 1);
+				enemies.at(eI)->setHealth(enemies.at(eI)->getHealth() - 1);
+				if (enemies.at(eI)->getHealth() <= 0)
+					enemies.erase(enemies.begin() + eI);
+	
+					bullets.erase(bullets.begin() + bI);
+
 			}
+		}
+	}
+		
 
 	
 }
