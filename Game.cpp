@@ -76,13 +76,9 @@ void Game::Update(float dt, sf::RenderWindow* window)
 				, bullet->getPosition().y + (sin(bullet->getRotation()*PI / 180) * (bullet->getVelocity() * dt)));
 
 	if (!bullets.empty())
-	{
-		if (bullets.front()->getPosition().x > 1280 || bullets.front()->getPosition().x < 0 || bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > 720 || bullets.size() >= 100)
-		{
-			delete *bullets.begin();
-			bullets.erase(bullets.begin());
-		}
-	}
+	if (bullets.front()->getPosition().x > 1280 || bullets.front()->getPosition().x < 0 ||
+		bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > 720 || bullets.size() >= 100)
+		bullets.front()->setAlive(false);
 		
 
 	for (int i = 0; i < enemies.size(); i++)
