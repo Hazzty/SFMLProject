@@ -6,13 +6,13 @@ class Bullet : public sf::CircleShape
 {
 private:
 	float velocity;
-	float rot;
-	
+	bool alive;
 
 public:
 	Bullet(sf::Sprite* player);
-
-	float getRot() const;
+	
+	bool isAlive() const;
+	void setAlive(bool alive);
 	float getVelocity() const;
 
 };

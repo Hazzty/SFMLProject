@@ -94,16 +94,28 @@ void Game::Update(float dt, sf::RenderWindow* window)
 		{
 			if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()))
 			{
-				enemies.at(eI)->setHealth(enemies.at(eI)->getHealth() - 1);
+				enemies.at(eI)->takeDamage(1.f);
 				if (enemies.at(eI)->getHealth() <= 0)
-					enemies.erase(enemies.begin() + eI);
+					enemies.at(eI)->setAlive(false);
 	
-					bullets.erase(bullets.begin() + bI);
+				bullets.at(bI)->setAlive(false);
 
 			}
 		}
 	}
-		
 
+	for (int eI = 0; eI < enemies.size(); eI++)
+		if (!enemies.at(eI)->isAlive())
+		{
+			delete enemies.at(eI);
+			enemies.erase(enemies.begin() + eI);
+		}
+		
+	for (int bI = 0; bI < bullets.size(); bI++)
+		if (!bullets.at(bI)->isAlive())
+		{
+			delete bullets.at(bI);
+			bullets.erase(bullets.begin() + bI);
+		}
 	
 }

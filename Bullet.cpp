@@ -7,12 +7,16 @@ Bullet::Bullet(sf::Sprite* player)
 	setFillColor(sf::Color::White);
 	setPosition(player->getPosition().x, player->getPosition().y);
 	velocity = 600.f;
-	rot = player->getRotation();
-	setRotation(rot);
+	alive = true;
+	setRotation(player->getRotation());
 }
-float Bullet::getRot() const
+bool Bullet::isAlive() const
 {
-	return rot;
+	return alive;
+}
+void Bullet::setAlive(bool alive)
+{
+	this->alive = alive;
 }
 float Bullet::getVelocity() const
 {

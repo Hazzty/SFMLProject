@@ -5,7 +5,7 @@ Player::Player()
 	health = 1;
 	velocity = 300.f;
 	sf::Texture text;
-	text.loadFromFile("Resources/player2.gif");
+	text.loadFromFile("Debug/Resources/player2.gif");
 	texture = text;
 	texture.setSmooth(true);
 	setTexture(texture);
