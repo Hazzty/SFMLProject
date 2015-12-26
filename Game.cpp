@@ -13,7 +13,18 @@ Game::Game(sf::RenderWindow* window)
 
 Game::~Game()
 {
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		delete bullets.at(i);
+		bullets.erase(bullets.begin() + i);
+	}
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		delete enemies.at(i);
+		enemies.erase(enemies.begin() + i);
+	}
 	bullets.clear();
+	enemies.clear();
 	delete player;
 }
 
@@ -95,8 +106,6 @@ void Game::Update(float dt, sf::RenderWindow* window)
 				enemies.at(eI)->takeDamage(1.f);
 				if (enemies.at(eI)->getHealth() <= 0)
 					enemies.at(eI)->setAlive(false);
-	
-				
 
 			}
 		}
@@ -111,7 +120,7 @@ void Game::Update(float dt, sf::RenderWindow* window)
 		
 	for (int bI = 0; bI < bullets.size(); bI++)
 		if (!bullets.at(bI)->isAlive())
-		{
+		{			
 			delete bullets.at(bI);
 			bullets.erase(bullets.begin() + bI);
 		}
