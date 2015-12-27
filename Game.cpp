@@ -9,6 +9,7 @@ Game::Game(sf::RenderWindow* window)
 	view = sf::View(sf::FloatRect(0, 0, 1280, 720));
 	for (int i = 0; i < 10; i++)
 		enemies.push_back(new EnemySmall(200, 3, player));
+		enemies.push_back(new EnemySmall(300, 1, player));
 }
 
 Game::~Game()
