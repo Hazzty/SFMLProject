@@ -41,7 +41,7 @@ void Game::Update(float dt, sf::RenderWindow* window)
 {
 	if (frameRateTimer >= 0.1)
 	{
-		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()));
+		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()) + " Enemies: " + std::to_string(enemies.size()));
 		frameRateTimer = 0;
 	}
 	else
