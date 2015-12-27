@@ -13,19 +13,17 @@ Game::Game(sf::RenderWindow* window)
 
 Game::~Game()
 {
-	for (int i = 0; i < bullets.size(); i++)
-	{
+	for (unsigned int i = 0; i < bullets.size(); i++)
 		delete bullets.at(i);
-		bullets.erase(bullets.begin() + i);
-	}
-	for (int i = 0; i < enemies.size(); i++)
-	{
-		delete enemies.at(i);
-		enemies.erase(enemies.begin() + i);
-	}
 	bullets.clear();
+
+	for (unsigned int i = 0; i < enemies.size(); i++)
+		delete enemies.at(i);
 	enemies.clear();
+
 	delete player;
+
+
 }
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
