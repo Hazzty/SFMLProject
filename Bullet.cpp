@@ -1,12 +1,16 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(sf::Sprite* player)
+Bullet::Bullet(sf::Sprite* player, float angleX, float angleY)
 {
+
+	this->vectorLength = sqrt(angleX*angleX + angleY*angleY);
+	velocity.x = (angleX / vectorLength);
+	velocity.y = (angleY / vectorLength);
 	setRadius(3.f);
 	setFillColor(sf::Color::White);
 	setPosition(player->getPosition().x, player->getPosition().y);
-	velocity = 600.f;
+	speed = 600.f;
 	alive = true;
 	setRotation(player->getRotation());
 }
@@ -18,7 +22,12 @@ void Bullet::setAlive(bool alive)
 {
 	this->alive = alive;
 }
-float Bullet::getVelocity() const
+float Bullet::getSpeed() const
+{
+	return speed;
+}
+
+sf::Vector2f Bullet::getVelocity() const
 {
 	return velocity;
 }

@@ -5,15 +5,17 @@
 class Bullet : public sf::CircleShape
 {
 private:
-	float velocity;
+	float speed;
 	bool alive;
+	float vectorLength;
+	sf::Vector2f velocity;
 
 public:
-	Bullet(sf::Sprite* player);
+	Bullet(sf::Sprite* player, float angleX, float angleY);
 	
 	bool isAlive() const;
 	void setAlive(bool alive);
-	float getVelocity() const;
-
+	float getSpeed() const;
+	sf::Vector2f getVelocity() const;
 };
 #endif
