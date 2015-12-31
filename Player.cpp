@@ -11,6 +11,7 @@ Player::Player()
 	setTexture(texture);
 	setScale(0.5, 0.5);
 	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	setPosition(1280/2, 720/2);
 }
 Player::Player(int health, float velocity)
 {
