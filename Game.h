@@ -16,11 +16,16 @@ private:
 	std::vector<Enemy*> enemies;
 	Player* player;
 	sf::View view;
+	double timeElapsed_Bullet;
+	double timeElapsed_Frame;
+	double timeElapsed_Enemy;
+	int enemyAmount;
+	float enemyMult;
 
 public:
 	Game(sf::RenderWindow* window);
 	~Game();
-	void Update(float dt, sf::RenderWindow* window);
+	void Update(float dt, sf::RenderWindow* window, bool isRunning);
 
 };
 #endif

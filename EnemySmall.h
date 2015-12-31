@@ -6,7 +6,7 @@ class EnemySmall : public Enemy
 private:
 
 public:
-	EnemySmall(float speed, float health, Player* player);
+	EnemySmall(Player* player);
 	void moveEnemy(float dt);
 };
 

@@ -1,4 +1,9 @@
 #include "Enemy.h"
+#define UP rand()%1280, -rand()%150
+#define DOWN rand()%1280, rand()%150 + 720
+#define LEFT -rand()%150, rand()%720
+#define RIGHT rand()%150 + 1280, rand()%720
+
 
 Enemy::Enemy()
 {
@@ -11,6 +16,24 @@ Enemy::Enemy(float speed, float health, Player* player)
 	this->health = health;
 	this->player = player;
 	alive = true;
+
+	switch (rand() % 4)
+	{
+	case 0:
+		setPosition(UP);
+		break;
+	case 1:
+		setPosition(RIGHT);
+		break;
+	case 2:
+		setPosition(DOWN);
+		break;
+	case 3:
+		setPosition(LEFT);
+		break;
+
+	}
+
 
 }
 Enemy::~Enemy()

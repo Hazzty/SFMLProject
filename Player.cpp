@@ -4,6 +4,8 @@ Player::Player()
 {
 	health = 1;
 	velocity = 300.f;
+	firerate = 0.01f;
+
 	sf::Texture text;
 	text.loadFromFile("Resources/player2.gif");
 	texture = text;
@@ -30,4 +32,15 @@ void Player::setHealth(int const health)
 float Player::getVelocity() const
 {
 	return velocity;
+}
+
+float Player::getFireRate() const
+{
+
+	return firerate;
+}
+
+void Player::setFireRate(float firerate)
+{
+	this->firerate = firerate;
 }
