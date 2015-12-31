@@ -8,13 +8,22 @@ Game::Game(sf::RenderWindow* window)
 	player = new Player();
 	view = sf::View(sf::FloatRect(0, 0, 1280, 720));
 	for (int i = 0; i < 10; i++)
-		enemies.push_back(new EnemySmall(200, 3, player));
+		enemies.push_back(new EnemySmall(300, 1, player));
 }
 
 Game::~Game()
 {
+	for (unsigned int i = 0; i < bullets.size(); i++)
+		delete bullets.at(i);
 	bullets.clear();
+
+	for (unsigned int i = 0; i < enemies.size(); i++)
+		delete enemies.at(i);
+	enemies.clear();
+
 	delete player;
+
+
 }
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -32,7 +41,7 @@ void Game::Update(float dt, sf::RenderWindow* window)
 {
 	if (frameRateTimer >= 0.1)
 	{
-		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()));
+		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()) + " Enemies: " + std::to_string(enemies.size()));
 		frameRateTimer = 0;
 	}
 	else
@@ -76,13 +85,9 @@ void Game::Update(float dt, sf::RenderWindow* window)
 				, bullet->getPosition().y + (sin(bullet->getRotation()*PI / 180) * (bullet->getVelocity() * dt)));
 
 	if (!bullets.empty())
-	{
-		if (bullets.front()->getPosition().x > 1280 || bullets.front()->getPosition().x < 0 || bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > 720 || bullets.size() >= 100)
-		{
-			delete *bullets.begin();
-			bullets.erase(bullets.begin());
-		}
-	}
+	if (bullets.front()->getPosition().x > 1280 || bullets.front()->getPosition().x < 0 ||
+		bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > 720)
+		bullets.front()->setAlive(false);
 		
 
 	for (int i = 0; i < enemies.size(); i++)
@@ -92,18 +97,30 @@ void Game::Update(float dt, sf::RenderWindow* window)
 	{
 		for (int bI = 0; bI < bullets.size(); bI++)
 		{
-			if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()))
+			if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()) && bullets.at(bI)->isAlive())
 			{
-				enemies.at(eI)->setHealth(enemies.at(eI)->getHealth() - 1);
+				bullets.at(bI)->setAlive(false);
+
+				enemies.at(eI)->takeDamage(1.f);
 				if (enemies.at(eI)->getHealth() <= 0)
-					enemies.erase(enemies.begin() + eI);
-	
-					bullets.erase(bullets.begin() + bI);
+					enemies.at(eI)->setAlive(false);
 
 			}
 		}
 	}
-		
 
+	for (int eI = 0; eI < enemies.size(); eI++)
+		if (!enemies.at(eI)->isAlive())
+		{
+			delete enemies.at(eI);
+			enemies.erase(enemies.begin() + eI);
+		}
+		
+	for (int bI = 0; bI < bullets.size(); bI++)
+		if (!bullets.at(bI)->isAlive())
+		{			
+			delete bullets.at(bI);
+			bullets.erase(bullets.begin() + bI);
+		}
 	
 }

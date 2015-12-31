@@ -10,6 +10,7 @@ Enemy::Enemy(float speed, float health, Player* player)
 	this->speed = speed;
 	this->health = health;
 	this->player = player;
+	alive = true;
 
 }
 Enemy::~Enemy()
@@ -42,4 +43,17 @@ float Enemy::getSpeed() const
 void Enemy::moveEnemy(float dt)
 {
 	move(0, 0);
+}
+
+bool Enemy::isAlive() const
+{
+	return alive;
+}
+void Enemy::setAlive(bool alive)
+{
+	this->alive = alive;
+}
+void Enemy::takeDamage(float amount)
+{
+	health -= amount;
 }
