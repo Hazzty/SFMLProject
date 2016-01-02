@@ -94,6 +94,19 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			player->move(0, player->getSpeed() * dt);
 		
 
+		//Debug input
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
+		{
+			for (unsigned int i = 0; i < enemies.size(); i++)
+				delete enemies.at(i);
+			enemies.clear();
+
+			enemyMult = 1.f;
+			player->setPosition(WIDTH / 2, HEIGHT / 2);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
+			enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
+
 		//Move every bullet in the direction of the cursor
 		for (Bullet* bullet : bullets)
 			bullet->move(bullet->getVelocity().x * bullet->getSpeed() * dt, bullet->getVelocity().y * bullet->getSpeed() * dt);
