@@ -3,8 +3,8 @@
 Player::Player()
 {
 	health = 1;
-	velocity = 300.f;
-	firerate = 0.01f;
+	speed = 300.f;
+	firerate = 0.05f;
 
 	sf::Texture text;
 	text.loadFromFile("Resources/player2.gif");
@@ -15,32 +15,76 @@ Player::Player()
 	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
 	setPosition(1280/2, 720/2);
 }
-Player::Player(int health, float velocity)
+Player::Player(int health, float speed)
 {
 	this->health = health;
-	this->velocity = velocity;
+	this->speed = speed;
+	firerate = 0.05f;
+
+	sf::Texture text;
+	text.loadFromFile("Resources/player2.gif");
+	texture = text;
+	texture.setSmooth(true);
+	setTexture(texture);
+	setScale(0.5, 0.5);
+	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	setPosition(1280 / 2, 720 / 2);
 }
 int Player::getHealth() const
 {
 	return health;
 }
-void Player::setHealth(int const health)
+bool Player::setHealth(int const health)
 {
-	this->health = health;
+	if (health >= 0)
+	{
+		this->health = health;
+		return true;
+	}
+	else return false;
 }
 
-float Player::getVelocity() const
+float Player::getSpeed() const
 {
-	return velocity;
+	return speed;
+}
+void Player::setSpeed(float speed)
+{
+	this->speed = speed;
+
 }
 
 float Player::getFireRate() const
 {
-
 	return firerate;
 }
-
-void Player::setFireRate(float firerate)
+bool Player::setFireRate(float firerate)
 {
-	this->firerate = firerate;
+	if (firerate >= 0)
+	{
+		this->firerate = firerate;
+		return true;
+	}
+	else return false;
+
+}
+
+bool Player::isVulnerable() const
+{
+	return vulnerable;
+}
+void Player::setVulnerable(bool vulnerable)
+{
+	this->vulnerable = vulnerable;
+}
+
+int Player::getDamage() const
+{
+	return damage;
+}
+void Player::setDamage(int damage)
+{
+	
+	this->damage = damage;
+
 }

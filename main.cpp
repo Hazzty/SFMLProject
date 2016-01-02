@@ -1,8 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include <iostream>
 #include <string>
-#include "Bullet.h"
 #include "Game.h"
 int main()
 {
@@ -12,6 +10,7 @@ int main()
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(false);
 	window.requestFocus();
+
 	bool isRunning = true;
 	sf::Clock dt;
 
