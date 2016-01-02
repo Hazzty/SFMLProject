@@ -1,20 +1,19 @@
 #include "Enemy.h"
-#define UP rand()%1280, -rand()%150
-#define DOWN rand()%1280, rand()%150 + 720
-#define LEFT -rand()%150, rand()%720
-#define RIGHT rand()%150 + 1280, rand()%720
 
 
 Enemy::Enemy()
 {
 	speed = 0.f;
 	health = 0.f;
+	alive = true;
 }
-Enemy::Enemy(float speed, float health, Player* player)
+Enemy::Enemy(float speed, float health, Player* player, sf::Texture* texture)
 {
 	this->speed = speed;
 	this->health = health;
 	this->player = player;
+	this->texture = *texture;
+	setTexture(this->texture);
 	alive = true;
 
 	switch (rand() % 4)
@@ -65,7 +64,7 @@ float Enemy::getSpeed() const
 }
 void Enemy::moveEnemy(float dt)
 {
-	move(0, 0);
+	//Here be dragons
 }
 
 bool Enemy::isAlive() const
