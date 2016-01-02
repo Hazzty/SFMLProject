@@ -6,7 +6,7 @@ class EnemySmall : public Enemy
 private:
 
 public:
-	EnemySmall(Player* player);
+	EnemySmall(Player* player, sf::Texture* texture);
 	void moveEnemy(float dt);
 };
 

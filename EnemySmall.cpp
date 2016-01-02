@@ -1,22 +1,26 @@
 #include "EnemySmall.h"
 
-EnemySmall::EnemySmall(Player* player) : Enemy(300, 1, player)
+EnemySmall::EnemySmall(Player* player, sf::Texture* texture) : Enemy(400, 1, player, texture)
 {
-	setSize(sf::Vector2f(50.f, 50.f));
-	setFillColor(sf::Color::Red);
+	setScale(0.1, 0.1);
 	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
+
 }
 
 
 void EnemySmall::moveEnemy(float dt) 
 {
-	float dx = getPosition().x - getPlayer()->getPosition().x;
-	float dy = getPosition().y - getPlayer()->getPosition().y;
+	if (this->getPosition() != getPlayer()->getPosition())
+	{
+		float dx = getPosition().x - getPlayer()->getPosition().x;
+		float dy = getPosition().y - getPlayer()->getPosition().y;
 
-	float playerRotation = ((atan2(dy, dx)) * 180 / PI) + 180;
+		float playerRotation = ((atan2(dy, dx)) * 180 / PI) + 180;
 
-	setRotation(playerRotation);
+		setRotation(playerRotation);
 
-	setPosition(getPosition().x + (cos(getRotation()*PI / 180) * (getSpeed() * dt))
-		, getPosition().y + (sin(getRotation()*PI / 180) * (getSpeed() * dt)));
+		setPosition(getPosition().x + (cos(getRotation()*PI / 180) * (getSpeed() * dt))
+			, getPosition().y + (sin(getRotation()*PI / 180) * (getSpeed() * dt)));
+	}
+
 }
