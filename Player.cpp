@@ -8,7 +8,6 @@ Player::Player()
 	alive = true;
 
 	sf::Texture text;
-
 	text.loadFromFile("Resources/player.png");
 	texture = text;
 	texture.setSmooth(true);

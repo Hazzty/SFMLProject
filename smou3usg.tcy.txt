@@ -1,0 +1,36 @@
+﻿Merge branch 'enemies' into dev
+
+# Conflicts:
+#	Game.cpp
+#	Player.cpp
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch dev
+# Your branch is ahead of 'origin/dev' by 3 commits.
+#   (use "git push" to publish your local commits)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   EnemyEasy.cpp
+#	modified:   EnemyEasy.h
+#	modified:   EnemySmall.cpp
+#	modified:   EnemySmall.h
+#	modified:   Game.cpp
+#	modified:   Game.h
+#	modified:   Player.cpp
+#	modified:   Player.h
+#	new file:   Resources/enemy_easy.png
+#	new file:   Resources/enemy_fast.png
+#	new file:   Resources/player.png
+#	new file:   Resources/player2.png
+#	new file:   Resources/powerup.png
+#
+

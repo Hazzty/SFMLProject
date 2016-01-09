@@ -23,6 +23,10 @@ int main(void)
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::LostFocus)
+				isRunning = false;
+			if (event.type == sf::Event::GainedFocus)
+				isRunning = true;
 
 			if (event.type == sf::Event::KeyPressed)
 			{

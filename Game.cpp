@@ -77,7 +77,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		player->setAlive(true);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
-		enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
+		enemies.push_back(new EnemyEasy(player, &texture_EnemyEasy));
 
 
 	if (isRunning && player->isAlive())
@@ -187,11 +187,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			enemies.push_back(new EnemyEasy(player, &texture_EnemyEasy));
 
 		if (timer_PowerUp)
-		{
-
-
-
-		}
+		{ }
 
 	}
 }
