@@ -5,12 +5,16 @@ Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
 	player = new Player();
-	view = sf::View(sf::FloatRect(0, 0, 1280, 720));
-	timeElapsed_Bullet = 0;
-	timeElapsed_Frame = 0;
-	timeElapsed_Enemy = 0;
-	enemyAmount = 1; 
+	view = sf::View(sf::FloatRect(0, 0, WIDTH, HEIGHT));
+	timer_Bullet = 0;
+	timer_Frame = 0;
+	timer_Enemy = 0;
+	enemyAmount = 3; 
 	enemyMult = 1.f;
+
+	texture_EnemySmall.loadFromFile("Resources/player2.gif");
+	texture_EnemySmall.setSmooth(true);
+
 }
 
 Game::~Game()
@@ -36,19 +40,22 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	for (unsigned int i = 0; i < bullets.size(); i++)
 		target.draw(*bullets.at(i), states);
+
+	for (unsigned int i = 0; i < powerups.size(); i++)
+		target.draw(*powerups.at(i), states);
 }
 
 void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 {
 
 	//Update framerate/frametime/enemy count/bullet count every 0.1 seconds
-	if (timeElapsed_Frame >= 0.1)
+	if (timer_Frame >= 0.1)
 	{
 		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()) + " Enemies: " + std::to_string(enemies.size()) + " EnemyMult: " + std::to_string(enemyMult));
-		timeElapsed_Frame = 0;
+		timer_Frame = 0;
 	}
 	else
-		timeElapsed_Frame += dt;
+		timer_Frame += dt;
 
 	if (isRunning)
 	{
@@ -65,26 +72,40 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 		//Handle input
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		if (timeElapsed_Bullet >= player->getFireRate())
+		if (timer_Bullet >= player->getFireRate())
 		{
 			bullets.push_back(new Bullet(player, mousePos.x - player->getPosition().x, mousePos.y - player->getPosition().y));
-			timeElapsed_Bullet = 0;
+			timer_Bullet = 0;
 		}
 		else
-			timeElapsed_Bullet += dt;
+			timer_Bullet += dt;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		if (player->getPosition().x + player->getVelocity()*dt <= 1280)
-			player->move((player->getVelocity() * dt), 0);
+		if (player->getPosition().x + player->getSpeed()*dt <= WIDTH)
+			player->move((player->getSpeed() * dt), 0);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		if (player->getPosition().x - player->getVelocity()*dt >= 0)
-			player->move(-player->getVelocity() * dt, 0);
+		if (player->getPosition().x - player->getSpeed()*dt >= 0)
+			player->move(-player->getSpeed() * dt, 0);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		if (player->getPosition().y - player->getVelocity()*dt >= 0)
-			player->move(0, -player->getVelocity() * dt);
+		if (player->getPosition().y - player->getSpeed()*dt >= 0)
+			player->move(0, -player->getSpeed() * dt);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		if (player->getPosition().y + player->getVelocity()*dt <= 720)
-			player->move(0, player->getVelocity() * dt);
+		if (player->getPosition().y + player->getSpeed()*dt <= HEIGHT)
+			player->move(0, player->getSpeed() * dt);
+		
+
+		//Debug input
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
+		{
+			for (unsigned int i = 0; i < enemies.size(); i++)
+				delete enemies.at(i);
+			enemies.clear();
+
+			enemyMult = 1.f;
+			player->setPosition(WIDTH / 2, HEIGHT / 2);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
+			enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
 
 		//Move every bullet in the direction of the cursor
 		for (Bullet* bullet : bullets)
@@ -93,8 +114,8 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 		//If the first bulle that was fired is outside of the view, flag it for removal.
 		if (!bullets.empty())
-		if (bullets.front()->getPosition().x > 1280 || bullets.front()->getPosition().x < 0 ||
-			bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > 720)
+		if (bullets.front()->getPosition().x > WIDTH || bullets.front()->getPosition().x < 0 ||
+			bullets.front()->getPosition().y < 0 || bullets.front()->getPosition().y > HEIGHT)
 			bullets.front()->setAlive(false);
 
 		//Move every enemy using its class unique movement pattern
@@ -133,15 +154,17 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			bullets.erase(bullets.begin() + bI);
 		}
 		
-		if (timeElapsed_Enemy >= 3.f)
+
+		//Handle enemy respawns
+		if (timer_Enemy >= 1.f)
 		{
-			enemyMult += 0.1;
-			timeElapsed_Enemy = 0;
+			enemyMult += 0.2;
+			timer_Enemy = 0;
 		}
 		else
-			timeElapsed_Enemy += dt;
-
+			timer_Enemy += dt;
+		if (enemies.size() == 0)
 		while (enemies.size() < enemyAmount*enemyMult)
-			enemies.push_back(new EnemySmall(player));
+			enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
 	}
 }

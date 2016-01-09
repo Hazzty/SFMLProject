@@ -6,6 +6,7 @@
 #include "Bullet.h"
 #include <vector>
 #include "EnemySmall.h"
+#include "PowerUp.h"
 
 class Game : public sf::Drawable
 {
@@ -14,13 +15,15 @@ private:
 	sf::Window* window;
 	std::vector<Bullet*> bullets;
 	std::vector<Enemy*> enemies;
+	std::vector<PowerUp*> powerups;
 	Player* player;
 	sf::View view;
-	double timeElapsed_Bullet;
-	double timeElapsed_Frame;
-	double timeElapsed_Enemy;
+	double timer_Bullet;
+	double timer_Frame;
+	double timer_Enemy;
 	int enemyAmount;
 	float enemyMult;
+	sf::Texture texture_EnemySmall;
 
 public:
 	Game(sf::RenderWindow* window);

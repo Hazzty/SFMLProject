@@ -6,19 +6,25 @@ class Player : public sf::Sprite
 {
 private:
 	int health;
-	float velocity;
-	sf::Texture texture;
+	int damage;
+	float speed;
 	float firerate;
-
+	bool vulnerable;
+	sf::Texture texture;
 public:
 	Player();
-	Player(int health, float velocity);
+	Player(int health, float speed);
 	float getFireRate() const;
-	void setFireRate(float firerate);
+	bool setFireRate(float firerate);
 	int getHealth() const;
-	void setHealth(int const health);
+	bool setHealth(int const health);
+	bool isVulnerable() const;
+	void setVulnerable(bool vulnerable);
 
-	float getVelocity() const;
+	int getDamage() const;
+	void setDamage(int damage); 
+	float getSpeed() const;
+	void setSpeed(float speed);
 };
 
 
