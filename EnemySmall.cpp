@@ -1,8 +1,7 @@
 #include "EnemySmall.h"
 
-EnemySmall::EnemySmall(Player* player, sf::Texture* texture) : Enemy(400, 1, player, texture)
+EnemySmall::EnemySmall(Player* player, sf::Texture* texture) : Enemy(400, 2, player, texture)
 {
-	setScale(0.1, 0.1);
 	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
 
 }

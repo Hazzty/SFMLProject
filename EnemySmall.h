@@ -7,6 +7,7 @@ class EnemySmall : public Enemy
 private:
 
 public:
+	virtual ~EnemySmall(){};
 	EnemySmall(Player* player, sf::Texture* texture);
 	void moveEnemy(float dt);
 };
