@@ -12,7 +12,7 @@ Game::Game(sf::RenderWindow* window)
 	enemyAmount = 3; 
 	enemyMult = 1.f;
 
-	texture_EnemySmall.loadFromFile("Resources/player2.gif");
+	texture_EnemySmall.loadFromFile("Resources/player.gif");
 	texture_EnemySmall.setSmooth(true);
 
 }

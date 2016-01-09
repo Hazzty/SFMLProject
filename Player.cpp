@@ -7,7 +7,7 @@ Player::Player()
 	firerate = 0.05f;
 
 	sf::Texture text;
-	text.loadFromFile("Resources/player2.gif");
+	text.loadFromFile("Resources/player.gif");
 	texture = text;
 	texture.setSmooth(true);
 	setTexture(texture);
@@ -22,7 +22,7 @@ Player::Player(int health, float speed)
 	firerate = 0.05f;
 
 	sf::Texture text;
-	text.loadFromFile("Resources/player2.gif");
+	text.loadFromFile("Resources/player.gif");
 	texture = text;
 	texture.setSmooth(true);
 	setTexture(texture);
