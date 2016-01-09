@@ -4,7 +4,7 @@ Player::Player()
 {
 	health = 1;
 	speed = 300.f;
-	firerate = 0.05f;
+	firerate = 0.1f;
 	alive = true;
 
 	sf::Texture text;
