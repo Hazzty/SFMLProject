@@ -25,6 +25,7 @@ private:
 	double timer_PowerUp;
 	int enemyAmount;
 	float enemyMult;
+	int highscore;
 	sf::Texture texture_EnemySmall;
 	sf::Texture texture_EnemyEasy;
 
@@ -32,5 +33,7 @@ public:
 	Game(sf::RenderWindow* window);
 	~Game();
 	void Update(float dt, sf::RenderWindow* window, bool isRunning);
+	void loadHighScore();
+	void saveHighScore();
 };
 #endif

@@ -4,8 +4,9 @@ Player::Player()
 {
 	health = 1;
 	speed = 300.f;
-	firerate = 0.1f;
+	firerate = 0.05f;
 	alive = true;
+	score = 0;
 
 	sf::Texture text;
 	text.loadFromFile("Resources/player.png");
@@ -84,9 +85,7 @@ int Player::getDamage() const
 }
 void Player::setDamage(int damage)
 {
-	
 	this->damage = damage;
-
 }
 
 bool Player::isAlive() const
@@ -96,4 +95,19 @@ bool Player::isAlive() const
 void Player::setAlive(bool alive)
 {
 	this->alive = alive;
+}
+
+void Player::addScore(int score)
+{
+	this->score += score;
+}
+
+int Player::getScore() const
+{
+	return score;
+}
+
+void Player::resetScore()
+{
+	score = 0;
 }

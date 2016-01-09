@@ -12,6 +12,7 @@ private:
 	bool vulnerable;
 	sf::Texture texture;
 	bool alive;
+	int score;
 public:
 	Player();
 	Player(int health, float speed);
@@ -28,6 +29,12 @@ public:
 	void setDamage(int damage); 
 	float getSpeed() const;
 	void setSpeed(float speed);
+
+	void addScore(int score);
+	int getScore() const;
+	void resetScore();
+
+
 };
 
 

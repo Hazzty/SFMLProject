@@ -1,6 +1,7 @@
 #include "Game.h"
 #define PI 3.14159265
 #include <iostream>
+#include <fstream>
 Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
@@ -11,7 +12,9 @@ Game::Game(sf::RenderWindow* window)
 	timer_Enemy = 0;
 	enemyAmount = 3; 
 	enemyMult = 1.f;
+	highscore = 0;
 
+	loadHighScore();
 
 	texture_EnemySmall.loadFromFile("Resources/enemy_fast.png");
 	texture_EnemySmall.setSmooth(true);
@@ -31,6 +34,7 @@ Game::~Game()
 		delete enemies.at(i);
 	enemies.clear();
 
+	saveHighScore();
 	delete player;
 
 }
@@ -49,13 +53,32 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(*powerups.at(i), states);
 }
 
+void Game::loadHighScore()
+{
+	std::ifstream ifs("highscore.txt");
+	int scr = 0;
+	if (ifs.good())
+		ifs >> scr;
+	ifs.close();
+
+	highscore = scr;
+
+}
+void Game::saveHighScore()
+{
+	std::ofstream ofs("highscore.txt");
+	ofs << highscore;
+	ofs.close();
+}
+
+
 void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 {
 
 	//Update framerate/frametime/enemy count/bullet count every 0.1 seconds
 	if (timer_Frame >= 0.1)
 	{
-		window->setTitle("You Are Blue - FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()) + " Enemies: " + std::to_string(enemies.size()) + " EnemyMult: " + std::to_string(enemyMult));
+		window->setTitle("FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()) + " Enemies: " + std::to_string(enemies.size()) + " EnemyMult: " + std::to_string(enemyMult) + " Highscore: " + std::to_string(highscore) + " Score: " + std::to_string(player->getScore()));
 		timer_Frame = 0;
 	}
 	else
@@ -63,7 +86,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 
 	//Debug input
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		for (unsigned int i = 0; i < enemies.size(); i++)
 			delete enemies.at(i);
@@ -94,7 +117,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		player->setRotation(playerRotation);
 
 		//Handle input
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		if (timer_Bullet >= player->getFireRate())
 		{
 			bullets.push_back(new Bullet(player, mousePos.x - player->getPosition().x, mousePos.y - player->getPosition().y));
@@ -119,7 +142,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 
 
-		//Move every bullet in the direction of the cursor
+		//Move every bullet towards the direction it was originally fire towards
 		for (Bullet* bullet : bullets)
 			bullet->move(bullet->getVelocity().x * bullet->getSpeed() * dt, bullet->getVelocity().y * bullet->getSpeed() * dt);
 
@@ -141,7 +164,13 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			playerBound.height -= 20;
 
 			if (enemies.at(eI)->getGlobalBounds().intersects(playerBound) && enemies.at(eI)->isAlive())
+			{
 				player->setAlive(false);
+				if (player->getScore() > highscore)
+					highscore = player->getScore();
+				player->resetScore();
+
+			}
 			for (unsigned int bI = 0; bI < bullets.size(); bI++)
 			{
 				if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()) && bullets.at(bI)->isAlive())
@@ -150,7 +179,10 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 					enemies.at(eI)->takeDamage(1.f);
 					if (enemies.at(eI)->getHealth() <= 0)
+					{
 						enemies.at(eI)->setAlive(false);
+						player->addScore(10*enemyMult);
+					}
 
 				}
 			}
@@ -185,9 +217,6 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		if (enemies.size() == 0)
 		while (enemies.size() < enemyAmount*enemyMult)
 			enemies.push_back(new EnemyEasy(player, &texture_EnemyEasy));
-
-		if (timer_PowerUp)
-		{ }
 
 	}
 }

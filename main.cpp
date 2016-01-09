@@ -7,7 +7,7 @@ int main(void)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "You Are Blue");
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "asd");
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(false);
 	window.requestFocus();
