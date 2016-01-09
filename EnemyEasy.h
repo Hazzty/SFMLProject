@@ -4,13 +4,10 @@
 
 class EnemyEasy : public Enemy
 {
-private:
-
-
 public:
-
-
-
+	virtual ~EnemyEasy(){};
+	EnemyEasy(Player* player, sf::Texture* texture);
+	void moveEnemy(float dt);
 
 };
 

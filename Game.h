@@ -6,6 +6,7 @@
 #include "Bullet.h"
 #include <vector>
 #include "EnemySmall.h"
+#include "EnemyEasy.h"
 #include "PowerUp.h"
 
 class Game : public sf::Drawable
@@ -21,9 +22,11 @@ private:
 	double timer_Bullet;
 	double timer_Frame;
 	double timer_Enemy;
+	double timer_powerUp;
 	int enemyAmount;
 	float enemyMult;
 	sf::Texture texture_EnemySmall;
+	sf::Texture texture_EnemyEasy;
 
 public:
 	Game(sf::RenderWindow* window);
