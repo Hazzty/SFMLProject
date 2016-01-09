@@ -1,5 +1,6 @@
 #ifndef ENEMYSMALL_H
 #define ENEMYSMALL_H
+
 #include "Enemy.h"
 class EnemySmall : public Enemy
 {

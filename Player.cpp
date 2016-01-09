@@ -12,7 +12,7 @@ Player::Player()
 	texture.setSmooth(true);
 	setTexture(texture);
 	setScale(0.5, 0.5);
-	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	setOrigin(float(texture.getSize().x / 2), float(texture.getSize().y / 2));
 	setPosition(1280/2, 720/2);
 }
 Player::Player(int health, float speed)
@@ -27,7 +27,7 @@ Player::Player(int health, float speed)
 	texture.setSmooth(true);
 	setTexture(texture);
 	setScale(0.5, 0.5);
-	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	setOrigin(float(texture.getSize().x / 2), float(texture.getSize().y / 2));
 	setPosition(1280 / 2, 720 / 2);
 }
 int Player::getHealth() const

@@ -1,5 +1,4 @@
 #include "Game.h"
-#define PI 3.14159265
 
 Game::Game(sf::RenderWindow* window)
 {
@@ -57,6 +56,20 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 	else
 		timer_Frame += dt;
 
+	//Debug input
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
+	{
+		for (unsigned int i = 0; i < enemies.size(); i++)
+			delete enemies.at(i);
+		enemies.clear();
+
+		enemyMult = 1.f;
+		player->setPosition(WIDTH / 2, HEIGHT / 2);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
+		enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
+
+
 	if (isRunning)
 	{
 
@@ -94,18 +107,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			player->move(0, player->getSpeed() * dt);
 		
 
-		//Debug input
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
-		{
-			for (unsigned int i = 0; i < enemies.size(); i++)
-				delete enemies.at(i);
-			enemies.clear();
 
-			enemyMult = 1.f;
-			player->setPosition(WIDTH / 2, HEIGHT / 2);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
-			enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
 
 		//Move every bullet in the direction of the cursor
 		for (Bullet* bullet : bullets)
@@ -123,9 +125,9 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			enemies.at(i)->moveEnemy(dt);
 
 		//Look for collisions between bullets and enemies
-		for (int eI = 0; eI < enemies.size(); eI++)
+		for (unsigned int eI = 0; eI < enemies.size(); eI++)
 		{
-			for (int bI = 0; bI < bullets.size(); bI++)
+			for (unsigned int bI = 0; bI < bullets.size(); bI++)
 			{
 				if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()) && bullets.at(bI)->isAlive())
 				{
@@ -140,14 +142,14 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		}
 
 		//Clean up dead enemies and bullets
-		for (int eI = 0; eI < enemies.size(); eI++)
+		for (unsigned int eI = 0; eI < enemies.size(); eI++)
 		if (!enemies.at(eI)->isAlive())
 		{
 			delete enemies.at(eI);
 			enemies.erase(enemies.begin() + eI);
 		}
 
-		for (int bI = 0; bI < bullets.size(); bI++)
+		for (unsigned int bI = 0; bI < bullets.size(); bI++)
 		if (!bullets.at(bI)->isAlive())
 		{
 			delete bullets.at(bI);
@@ -158,13 +160,16 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		//Handle enemy respawns
 		if (timer_Enemy >= 1.f)
 		{
-			enemyMult += 0.2;
+			enemyMult += 0.05;
 			timer_Enemy = 0;
 		}
 		else
 			timer_Enemy += dt;
 		if (enemies.size() == 0)
-		while (enemies.size() < enemyAmount*enemyMult)
-			enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
+		{
+			while (enemies.size() < enemyAmount*enemyMult)
+				enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
+		}
+		
 	}
 }

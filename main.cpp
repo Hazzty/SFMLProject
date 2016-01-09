@@ -2,7 +2,8 @@
 #include <iostream>
 #include <string>
 #include "Game.h"
-int main()
+
+int main(void)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
@@ -22,10 +23,12 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+
 			if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
 					window.close();
+
 				if (event.key.code == sf::Keyboard::P)
 				{
 					if (isRunning)
@@ -45,5 +48,6 @@ int main()
 	}
 
 	delete game;
+
 	return 0;
 }

@@ -8,6 +8,8 @@
 #include "EnemySmall.h"
 #include "PowerUp.h"
 
+
+#define PI 3.14159265
 class Game : public sf::Drawable
 {
 private:
@@ -29,6 +31,5 @@ public:
 	Game(sf::RenderWindow* window);
 	~Game();
 	void Update(float dt, sf::RenderWindow* window, bool isRunning);
-
-};
+}
 #endif
