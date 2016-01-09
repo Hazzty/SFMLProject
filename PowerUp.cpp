@@ -1,6 +1,5 @@
 #include "PowerUp.h"
 
-
 PowerUp::PowerUp(EFFECT effect)
 {
 	this->effect = effect;
@@ -36,4 +35,3 @@ void PowerUp::applyEffect(Player* player)
 
 	}
 }
-

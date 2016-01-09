@@ -2,16 +2,13 @@
 #define POWERUP_H
 #include <SFML/Graphics.hpp>
 #include "Player.h"
-enum EFFECT
-{
+
+enum EFFECT{
 	SPEED,
 	FIRERATE,
 	DAMAGE
-
 };
-
-
-class PowerUp :	public sf::Sprite
+class PowerUp : public sf::Sprite
 {
 private:
 	EFFECT effect;
