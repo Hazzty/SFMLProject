@@ -11,6 +11,7 @@ private:
 	float firerate;
 	bool vulnerable;
 	sf::Texture texture;
+	bool alive;
 public:
 	Player();
 	Player(int health, float speed);
@@ -20,6 +21,8 @@ public:
 	bool setHealth(int const health);
 	bool isVulnerable() const;
 	void setVulnerable(bool vulnerable);
+	bool isAlive() const;
+	void setAlive(bool alive);
 
 	int getDamage() const;
 	void setDamage(int damage); 

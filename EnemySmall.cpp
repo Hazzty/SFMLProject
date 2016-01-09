@@ -2,9 +2,8 @@
 
 EnemySmall::EnemySmall(Player* player, sf::Texture* texture) : Enemy(400, 1, player, texture)
 {
-	setScale(0.1, 0.1);
+	setScale(.5f, .5f);
 	setOrigin(getGlobalBounds().width / 2, getGlobalBounds().height / 2);
-
 }
 
 

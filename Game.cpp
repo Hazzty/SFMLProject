@@ -1,6 +1,6 @@
 #include "Game.h"
 #define PI 3.14159265
-
+#include <iostream>
 Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
@@ -57,7 +57,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 	else
 		timer_Frame += dt;
 
-	if (isRunning)
+	if (isRunning && player->isAlive())
 	{
 
 		//=========== Player Face Cursor ==========
@@ -103,6 +103,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 			enemyMult = 1.f;
 			player->setPosition(WIDTH / 2, HEIGHT / 2);
+			player->setAlive(true);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
 			enemies.push_back(new EnemySmall(player, &texture_EnemySmall));
@@ -119,13 +120,20 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			bullets.front()->setAlive(false);
 
 		//Move every enemy using its class unique movement pattern
-		for (int i = 0; i < enemies.size(); i++)
+		for (unsigned int i = 0; i < enemies.size(); i++)
 			enemies.at(i)->moveEnemy(dt);
 
-		//Look for collisions between bullets and enemies
-		for (int eI = 0; eI < enemies.size(); eI++)
+		//Look for collisions between bullets and enemies and the player
+		for (unsigned int eI = 0; eI < enemies.size(); eI++)
 		{
-			for (int bI = 0; bI < bullets.size(); bI++)
+			sf::FloatRect currBulletBound = enemies.at(eI)->getGlobalBounds();
+			currBulletBound.height -= 60;
+			currBulletBound.width -= 60;
+
+
+			if (player->getGlobalBounds().intersects(currBulletBound))
+				player->setAlive(false);
+			for (unsigned int bI = 0; bI < bullets.size(); bI++)
 			{
 				if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()) && bullets.at(bI)->isAlive())
 				{
@@ -137,17 +145,18 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 
 				}
 			}
+
 		}
 
 		//Clean up dead enemies and bullets
-		for (int eI = 0; eI < enemies.size(); eI++)
+		for (unsigned int eI = 0; eI < enemies.size(); eI++)
 		if (!enemies.at(eI)->isAlive())
 		{
 			delete enemies.at(eI);
 			enemies.erase(enemies.begin() + eI);
 		}
 
-		for (int bI = 0; bI < bullets.size(); bI++)
+		for (unsigned int bI = 0; bI < bullets.size(); bI++)
 		if (!bullets.at(bI)->isAlive())
 		{
 			delete bullets.at(bI);

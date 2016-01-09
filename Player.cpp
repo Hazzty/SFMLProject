@@ -5,13 +5,13 @@ Player::Player()
 	health = 1;
 	speed = 300.f;
 	firerate = 0.05f;
+	alive = true;
 
 	sf::Texture text;
-	text.loadFromFile("Resources/player2.gif");
+	text.loadFromFile("Resources/player.png");
 	texture = text;
 	texture.setSmooth(true);
 	setTexture(texture);
-	setScale(0.5, 0.5);
 	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
 	setPosition(1280/2, 720/2);
 }
@@ -20,13 +20,13 @@ Player::Player(int health, float speed)
 	this->health = health;
 	this->speed = speed;
 	firerate = 0.05f;
+	alive = true;
 
 	sf::Texture text;
-	text.loadFromFile("Resources/player2.gif");
+	text.loadFromFile("Resources/player.png");
 	texture = text;
 	texture.setSmooth(true);
 	setTexture(texture);
-	setScale(0.5, 0.5);
 	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
 	setPosition(1280 / 2, 720 / 2);
 }
@@ -87,4 +87,13 @@ void Player::setDamage(int damage)
 	
 	this->damage = damage;
 
+}
+
+bool Player::isAlive() const
+{
+	return alive;
+}
+void Player::setAlive(bool alive)
+{
+	this->alive = alive;
 }
