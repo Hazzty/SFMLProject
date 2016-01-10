@@ -22,12 +22,13 @@ private:
 public:
 	Enemy();
 	Enemy(float speed, float health, Player* player, sf::Texture* texture);
-	~Enemy();
+	virtual ~Enemy();
 
 	Player* getPlayer();
 
 	bool isAlive() const;
 	void setAlive(bool alive);
+
 	void takeDamage(float amount);
 
 	void setHealth(float health);

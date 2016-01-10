@@ -11,6 +11,7 @@ int main(void)
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(false);
 	window.requestFocus();
+	window.clear(sf::Color::White);
 
 	bool isRunning = true;
 	sf::Clock dt;

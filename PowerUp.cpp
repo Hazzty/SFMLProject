@@ -1,11 +1,28 @@
 #include "PowerUp.h"
 
-PowerUp::PowerUp(EFFECT effect)
+PowerUp::PowerUp(EFFECT effect, sf::Texture* texture)
 {
 	this->effect = effect;
+	setPosition(rand() % 1280, rand() % 720);
+	this->texture = *texture;
+	setTexture(this->texture);
+	alive = true;
+
+	switch (effect)
+	{
+	case FIRERATE:
+		this->setColor(sf::Color::Green);
+		break;
+	case SPEED:
+		this->setColor(sf::Color::Yellow);
+		break;
+	case DAMAGE:
+		this->setColor(sf::Color::Red);
+		break;
+	}
+
 
 }
-
 
 PowerUp::~PowerUp()
 {
@@ -34,4 +51,14 @@ void PowerUp::applyEffect(Player* player)
 		break;
 
 	}
+}
+
+bool PowerUp::isAlive() const
+{
+	return alive;
+}
+
+void PowerUp::setAlive(bool alive)
+{
+	this->alive = alive;
 }

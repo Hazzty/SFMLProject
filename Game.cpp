@@ -2,6 +2,7 @@
 #define PI 3.14159265
 #include <iostream>
 #include <fstream>
+#include <cmath>
 Game::Game(sf::RenderWindow* window)
 {
 	this->window = window;
@@ -22,6 +23,7 @@ Game::Game(sf::RenderWindow* window)
 	texture_EnemyEasy.loadFromFile("Resources/enemy_easy.png");
 	texture_EnemyEasy.setSmooth(true);
 
+	texture_PowerUp.loadFromFile("Resources/powerup.png");
 }
 
 Game::~Game()
@@ -78,7 +80,13 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 	//Update framerate/frametime/enemy count/bullet count every 0.1 seconds
 	if (timer_Frame >= 0.1)
 	{
-		window->setTitle("FPS: " + std::to_string(1/dt) + " Frametime: " + std::to_string(dt) + " Bullets: " + std::to_string(bullets.size()) + " Enemies: " + std::to_string(enemies.size()) + " EnemyMult: " + std::to_string(enemyMult) + " Highscore: " + std::to_string(highscore) + " Score: " + std::to_string(player->getScore()));
+		window->setTitle("FPS: " + std::to_string(1/dt) + 
+			" Frametime: " + std::to_string(dt) + 
+			" Bullets: " + std::to_string(bullets.size()) + 
+			" Enemies: " + std::to_string(enemies.size()) + 
+			" EnemyMult: " + std::to_string(enemyMult) + 
+			" Highscore: " + std::to_string(highscore) +
+			" Score: " + std::to_string(player->getScore()));
 		timer_Frame = 0;
 	}
 	else
@@ -92,17 +100,28 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			delete enemies.at(i);
 		for (unsigned int i = 0; i < bullets.size(); i++)
 			delete bullets.at(i);
+		for (unsigned int i = 0; i < powerups.size(); i++)
+			delete powerups.at(i);
 		enemies.clear();
 		bullets.clear();
+		powerups.clear();
+
+		timer_Bullet = 0;
+		timer_Enemy = 0;
+		timer_PowerUp = 0;
 
 		enemyMult = 1.f;
 		player->setPosition(WIDTH / 2, HEIGHT / 2);
 		player->setAlive(true);
+		player->setDamage(1);
+		player->setSpeed(300.f);
+		player->setFireRate(0.2f);
+		player->resetScore();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
 		enemies.push_back(new EnemyEasy(player, &texture_EnemyEasy));
 
-
+	//Only run the game when its not paused and if the player is alive
 	if (isRunning && player->isAlive())
 	{
 
@@ -160,8 +179,24 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		//Look for collisions between bullets and enemies and the player
 		for (unsigned int eI = 0; eI < enemies.size(); eI++)
 		{
+			
+			for (unsigned int bI = 0; bI < bullets.size(); bI++)
+			{
+				if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()) && bullets.at(bI)->isAlive())
+				{
+					bullets.at(bI)->setAlive(false);
+
+					enemies.at(eI)->takeDamage(player->getDamage());
+					if (enemies.at(eI)->getHealth() <= 0)
+					{
+						enemies.at(eI)->setAlive(false);
+						player->addScore(floor(10*enemyMult));
+					}
+
+				}
+			}
 			sf::FloatRect playerBound = player->getGlobalBounds();
-			playerBound.height -= 20;
+			playerBound.height -= 20; //Poor attempt at making bounding boxes more accurate
 
 			if (enemies.at(eI)->getGlobalBounds().intersects(playerBound) && enemies.at(eI)->isAlive())
 			{
@@ -171,20 +206,16 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 				player->resetScore();
 
 			}
-			for (unsigned int bI = 0; bI < bullets.size(); bI++)
+
+		}
+
+		for (unsigned int i = 0; i < powerups.size(); i++)
+		{
+			if (powerups.at(i)->getGlobalBounds().intersects(player->getGlobalBounds()) && powerups.at(i)->isAlive())
 			{
-				if (enemies.at(eI)->getGlobalBounds().intersects(bullets.at(bI)->getGlobalBounds()) && bullets.at(bI)->isAlive())
-				{
-					bullets.at(bI)->setAlive(false);
-
-					enemies.at(eI)->takeDamage(1.f);
-					if (enemies.at(eI)->getHealth() <= 0)
-					{
-						enemies.at(eI)->setAlive(false);
-						player->addScore(10*enemyMult);
-					}
-
-				}
+				powerups.at(i)->applyEffect(player);
+				powerups.at(i)->setAlive(false);
+				
 			}
 
 		}
@@ -204,9 +235,22 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 			bullets.erase(bullets.begin() + bI);
 		}
 		
+		for (unsigned int i = 0; i < powerups.size(); i++)
+			if (!powerups.at(i)->isAlive())
+			{
+				delete powerups.at(i);
+				powerups.erase(powerups.begin() + i);
+			}
+		
+		
 
-		//Handle enemy respawns
-		if (timer_Enemy >= 2.f)
+		/*
+		Handle enemy respawns
+
+		Spawns one fast enemy every 2 seconds, also increases the enemymult
+		Which in turn acts as a score multiplier
+		*/
+		if (timer_Enemy >= 2.f) 
 		{
 			enemyMult += 0.2;
 			timer_Enemy = 0;
@@ -215,8 +259,28 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		else
 			timer_Enemy += dt;
 		if (enemies.size() == 0)
-		while (enemies.size() < enemyAmount*enemyMult)
+		while (enemies.size() < enemyAmount*enemyMult) //The longer you take the more enemies will be in the next wave
 			enemies.push_back(new EnemyEasy(player, &texture_EnemyEasy));
+
+		if (timer_PowerUp >= 10.f)
+		{
+			switch (rand() % 3)
+			{
+			case 0:
+				powerups.push_back(new PowerUp(FIRERATE, &texture_PowerUp));
+				break;
+			case 1:
+				powerups.push_back(new PowerUp(DAMAGE, &texture_PowerUp));
+				break;
+			case 2:
+				powerups.push_back(new PowerUp(SPEED, &texture_PowerUp));
+				break;
+			}
+			
+			timer_PowerUp = 0;
+		}
+		else
+			timer_PowerUp += dt;
 
 	}
 }

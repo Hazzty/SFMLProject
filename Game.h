@@ -28,11 +28,12 @@ private:
 	int highscore;
 	sf::Texture texture_EnemySmall;
 	sf::Texture texture_EnemyEasy;
+	sf::Texture texture_PowerUp;
 
 public:
 	Game(sf::RenderWindow* window);
-	~Game();
-	void Update(float dt, sf::RenderWindow* window, bool isRunning);
+	virtual ~Game();
+	void Update(float const dt, sf::RenderWindow* window, bool isRunning);
 	void loadHighScore();
 	void saveHighScore();
 };

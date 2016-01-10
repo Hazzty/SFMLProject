@@ -4,7 +4,8 @@ Player::Player()
 {
 	health = 1;
 	speed = 300.f;
-	firerate = 0.05f;
+	firerate = 0.2f;
+	damage = 1;
 	alive = true;
 	score = 0;
 
@@ -13,7 +14,7 @@ Player::Player()
 	texture = text;
 	texture.setSmooth(true);
 	setTexture(texture);
-	setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	setOrigin(float(texture.getSize().x / 2), float(texture.getSize().y / 2));
 	setPosition(1280/2, 720/2);
 }
 Player::Player(int health, float speed)
