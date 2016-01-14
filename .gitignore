@@ -49,3 +49,8 @@ Debug/vc120.pdb
 SFMLProject.vcxproj
 *.filters
 yviofcgh.cqc.txt
+Release/SFMLProject.log
+Release/vc120.pdb
+Release/SFMLProject.log
+Source/Bullet.cpp
+Source/Bullet.h

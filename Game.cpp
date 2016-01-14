@@ -262,7 +262,7 @@ void Game::Update(float dt, sf::RenderWindow* window, bool isRunning)
 		while (enemies.size() < enemyAmount*enemyMult) //The longer you take the more enemies will be in the next wave
 			enemies.push_back(new EnemyEasy(player, &texture_EnemyEasy));
 
-		if (timer_PowerUp >= 10.f)
+		if (timer_PowerUp >= 5.f)
 		{
 			switch (rand() % 3)
 			{
